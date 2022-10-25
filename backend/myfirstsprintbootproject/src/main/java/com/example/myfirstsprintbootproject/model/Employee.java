@@ -10,7 +10,6 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false,updatable = false)
-
     private Long id;
     private String name;
     private String email;
@@ -21,6 +20,7 @@ public class Employee implements Serializable {
     @Column(nullable = false,updatable = false)
     private String employeeCode;
 
+    public Employee() {}
     Employee( Long id, String name, String email, String jobTitle, String phone, String imageUrl, String employeeCode){
         this.id = id;
         this.name = name;
