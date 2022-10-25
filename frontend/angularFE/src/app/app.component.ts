@@ -6,7 +6,7 @@ import { EmployeeService } from './employee/employee.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.sass']
+  styleUrls: ['./styles.css']
 })
 export class AppComponent implements OnInit {
   public employees: Employee[]=[];
