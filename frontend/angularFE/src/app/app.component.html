@@ -14,7 +14,7 @@
   <div class="collapse navbar-collapse" id="navbarColor02">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link"
+        <a class="nav-link" (click)="onOpenModal(undefined, 'add')"
           >Add Employee <span class="sr-only">(current)</span></a
         >
       </li>
@@ -22,6 +22,8 @@
     <form class="form-inline my-2 my-lg-0">
       <input
         type="search"
+        (ngModelChange)="searchEmployees(key.value)"
+        #key="ngModel"
         ngModel
         name="key"
         id="searchName"
@@ -32,7 +34,6 @@
     </form>
   </div>
 </nav>
-
 <div class="container" id="main-container">
   <div class="row">
     <div *ngFor="let employee of employees" class="col-md-6 col-xl-3">
@@ -62,12 +63,14 @@
         <div class="card-body">
           <div class="float-right btn-group btn-group-sm">
             <a
+              (click)="onOpenModal(employee, 'edit')"
               class="btn btn-primary tooltips"
               data-placement="top"
               data-original-title="Edit"
               ><i class="fa fa-pencil"></i>
             </a>
             <a
+              (click)="onOpenModal(employee, 'delete')"
               class="btn btn-secondary tooltips"
               data-placement="top"
               data-original-title="Delete"
@@ -102,7 +105,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <form>
+          <form #addForm="ngForm" (ngSubmit)="onAddEmployee(addForm)">
             <div class="form-group">
               <label for="name">Name</label>
               <input
@@ -172,7 +175,11 @@
               >
                 Close
               </button>
-              <button type="submit" class="btn btn-primary">
+              <button
+                [disabled]="addForm.invalid"
+                type="submit"
+                class="btn btn-primary"
+              >
                 Save changes
               </button>
             </div>
@@ -195,7 +202,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="updateEmployeeModalLabel">
-            Edit Employee
+            Edit Employee {{ editEmployee?.name }}
           </h5>
           <button
             type="button"
@@ -207,11 +214,12 @@
           </button>
         </div>
         <div class="modal-body">
-          <form>
+          <form #editForm="ngForm">
             <div class="form-group">
               <label for="name">Name</label>
               <input
                 type="text"
+                ngModel="{{ editEmployee?.name }}"
                 name="name"
                 class="form-control"
                 id="name"
@@ -221,6 +229,7 @@
             </div>
             <input
               type="hidden"
+              ngModel="{{ editEmployee?.id }}"
               name="id"
               class="form-control"
               id="id"
@@ -228,6 +237,7 @@
             />
             <input
               type="hidden"
+              ngModel="{{ editEmployee?.employeeCode }}"
               name="userCode"
               class="form-control"
               id="userCode"
@@ -237,6 +247,7 @@
               <label for="email">Email Address</label>
               <input
                 type="email"
+                ngModel="{{ editEmployee?.email }}"
                 name="email"
                 class="form-control"
                 id="email"
@@ -247,6 +258,7 @@
               <label for="phone">Job title</label>
               <input
                 type="text"
+                ngModel="{{ editEmployee?.jobTitle }}"
                 name="jobTitle"
                 class="form-control"
                 id="jobTitle"
@@ -257,6 +269,7 @@
               <label for="phone">Phone</label>
               <input
                 type="text"
+                ngModel="{{ editEmployee?.phone }}"
                 name="phone"
                 class="form-control"
                 id="phone"
@@ -268,6 +281,7 @@
               <label for="phone">Image URL</label>
               <input
                 type="text"
+                ngModel="{{ editEmployee?.imageUrl }}"
                 name="imageUrl"
                 class="form-control"
                 id="imageUrl"
@@ -283,7 +297,11 @@
               >
                 Close
               </button>
-              <button data-dismiss="modal" class="btn btn-primary">
+              <button
+                (click)="onUpdateEmployee(editForm.value)"
+                data-dismiss="modal"
+                class="btn btn-primary"
+              >
                 Save changes
               </button>
             </div>
@@ -316,7 +334,9 @@
           </button>
         </div>
         <div class="modal-body">
-          <p>Are you sure you want to delete employee ?</p>
+          <p>
+            Are you sure you want to delete employee {{ deleteEmployee?.name }}?
+          </p>
           <div class="modal-footer">
             <button
               type="button"
@@ -325,7 +345,13 @@
             >
               No
             </button>
-            <button class="btn btn-danger" data-dismiss="modal">Yes</button>
+            <button
+              (click)="onDeleteEmployee(deleteEmployee!.id)"
+              class="btn btn-danger"
+              data-dismiss="modal"
+            >
+              Yes
+            </button>
           </div>
         </div>
       </div>
